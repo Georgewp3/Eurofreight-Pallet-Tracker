@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pallet Tracking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header div {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid white;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            margin: 2px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #8BC34A;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background-color: #7CB342;
+        }
+
+        .fault {
+            background-color: #f0f0f0;
+            color: red;
+            font-weight: bold;
+        }
+
+        .fault.good {
+            background-color: f0f0f0;
+            color: green;
+        }
+
+        .highlight {
+            background-color: #f0f0f0;
+        }
+
+        .manual {
+            background-color: #f0f0f0;
+        }
+
+        .auto-total {
+            background-color: #f0f0f0;
+        }
+
+        .check {
+            background-color: #f0f0f0;
+        }
+
+        .delete {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .delete button {
+            font-size: 16px;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .delete button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Pallet Tracking</h1>
+    <div class="header">
+        <div>DATE: <input type="date" id="current-date"></div>
+        <div>WEEK: <input type="number" id="current-week" min="0" max="52"></div>
+        <div>CONTAINER ID: <input type="text" value=""></div>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Count</th>
+                <th>-1</th>
+                <th>+1</th>
+                <th class="highlight"></th>
+                <th class="manual"></th>
+                <th class="auto-total"></th>
+                <th class="check"></th>
+                <th class="fault"></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr style="background-color: #f0f0f0;">
+                <td>LOOSE</td>
+                <td id="loose-count">0</td>
+                <td><button class="btn" onclick="decrementCount('loose-count')">-1</button></td>
+                <td><button class="btn" onclick="incrementCount('loose-count')">+1</button></td>
+            <tr style="background-color: #f0f0f0;">
+
+                <td>ΕΛΑΦΡΙΟΥ ΤΥΠΟΥ</td>
+                <td id="light-count">0</td>
+                <td><button class="btn" onclick="decrementCount('light-count')">-1</button></td>
+                <td><button class="btn" onclick="incrementCount('light-count')">+1</button></td>
+                <td colspan="5" style="background-color: #f0f0f0;"></td>
+            </tr>
+            <tr style="background-color: #f0f0f0;">
+                <td>ΒΑΡΕΤΟΥ ΤΥΠΟΥ</td>
+                <td id="heavy-count">0</td>
+                <td><button class="btn" onclick="decrementCount('heavy-count')">-1</button></td>
+                <td><button class="btn" onclick="incrementCount('heavy-count')">+1</button></td>
+                <td colspan="5" style="background-color: #f0f0f0;"></td>
+            </tr>
+            <tr style="background-color: #f0f0f0;">
+                <td>BULK</td>
+                <td id="bulk-count">0</td>
+                <td><button class="btn" onclick="decrementCount('bulk-count')">-1</button></td>
+                <td><button class="btn" onclick="incrementCount('bulk-count')">+1</button></td>
+                <td colspan="5" style="background-color: #f0f0f0;"></td>
+            </tr>
+            <tr style="background-color: #f0f0f0;">
+                <td>EURO</td>
+                <td id="euro-count">0</td>
+                <td><button class="btn" onclick="decrementCount('euro-count')">-1</button></td>
+                <td><button class="btn" onclick="incrementCount('euro-count')">+1</button></td>
+                <td colspan="5" style="background-color: #f0f0f0;"></td>
+            </tr>
+            <tr style="background-color: #f0f0f0;">
+                <td>HALF PALLET</td>
+                <td id="half-count">0</td>
+                <td><button class="btn" onclick="decrementCount('half-count')">-1</button></td>
+                <td><button class="btn" onclick="incrementCount('half-count')">+1</button></td>
+                <td colspan="5" style="background-color: #f0f0f0;"></td>
+            </tr>
+            <tr style="background-color: #f0f0f0;">
+                <td>MIX</td>
+                <td id="mix-count">0</td>
+                <td><button class="btn" onclick="decrementCount('mix-count')">-1</button></td>
+                <td><button class="btn" onclick="incrementCount('mix-count')">+1</button></td>
+                <td class="LOOSE BOXES" style="background-color: grey; color:white">LOOSE BOXES</td>
+                <td class="manual" style="background-color: grey; color:white">MANUAL</td>
+                <td class="auto-total" style="background-color: grey; color:white">AUTO TOTAL</td>
+                <td class="check" style="background-color: grey; color:white">CHECK</td>
+                <td class="fault" style="background-color: grey; color:white">AUTO</td>
+            <tr>
+                <td>7101 NIC</td>
+                <td id="nic-count">0</td>
+                <td><button class="btn" onclick="updateCount('nic-count', -1)">-1</button></td>
+                <td><button class="btn" onclick="updateCount('nic-count', 1)">+1</button></td>
+                <td id="NIC-loose-boxes">0</td>
+                <td>
+                    <button class="btn" onclick="updateCount('NIC-loose-boxes', -1)">-1</button>
+                    <button class="btn" onclick="updateCount('NIC-loose-boxes', 1)">+1</button>
+                </td>
+                <td id="nic-auto-total" class="auto-total">0</td>
+                <td class="check"><input type="checkbox" onclick="updateFault(this)"></td>
+                <td class="fault">FAULT</td>
+            </tr>
+            <tr>
+                <td>7110 LAK</td>
+                <td id="lak-count">0</td>
+                <td><button class="btn" onclick="updateCount('lak-count', -1)">-1</button></td>
+                <td><button class="btn" onclick="updateCount('lak-count', 1)">+1</button></td>
+                <td id="LAK-loose-boxes">0</td>
+                <td>
+                    <button class="btn" onclick="updateCount('LAK-loose-boxes', -1)">-1</button>
+                    <button class="btn" onclick="updateCount('LAK-loose-boxes', 1)">+1</button>
+                </td>
+                <td id="lak-auto-total" class="auto-total">0</td>
+                <td class="check"><input type="checkbox" onclick="updateFault(this)"></td>
+                <td class="fault">FAULT</td>
+            </tr>
+            <tr>
+                <td>7120 LIM</td>
+                <td id="lim-count">0</td>
+                <td><button class="btn" onclick="updateCount('lim-count', -1)">-1</button></td>
+                <td><button class="btn" onclick="updateCount('lim-count', 1)">+1</button></td>
+                <td id="LIM-loose-boxes">0</td>
+                <td>
+                    <button class="btn" onclick="updateCount('LIM-loose-boxes', -1)">-1</button>
+                    <button class="btn" onclick="updateCount('LIM-loose-boxes', 1)">+1</button>
+                </td>
+                <td id="lim-auto-total" class="auto-total">0</td>
+                <td class="check"><input type="checkbox" onclick="updateFault(this)"></td>
+                <td class="fault">FAULT</td>
+            </tr>
+
+            <tr>
+                <td>7150 LCA</td>
+                <td id="lca-count">0</td>
+                <td><button class="btn" onclick="updateCount('lca-count', -1)">-1</button></td>
+                <td><button class="btn" onclick="updateCount('lca-count', 1)">+1</button></td>
+                <td id="LCA-loose-boxes">0</td>
+                <td>
+                    <button class="btn" onclick="updateCount('LCA-loose-boxes', -1)">-1</button>
+                    <button class="btn" onclick="updateCount('LCA-loose-boxes', 1)">+1</button>
+                </td>
+                <td id="lca-auto-total" class="auto-total">0</td>
+                <td class="check"><input type="checkbox" onclick="updateFault(this)"></td>
+                <td class="fault">FAULT</td>
+            </tr>
+
+            <tr>
+                <td>7140 FAM</td>
+                <td id="fam-count">0</td>
+                <td><button class="btn" onclick="updateCount('fam-count', -1)">-1</button></td>
+                <td><button class="btn" onclick="updateCount('fam-count', 1)">+1</button></td>
+                <td id="FAM-loose-boxes">0</td>
+                <td>
+                    <button class="btn" onclick="updateCount('FAM-loose-boxes', -1)">-1</button>
+                    <button class="btn" onclick="updateCount('FAM-loose-boxes', 1)">+1</button>
+                </td>
+                <td id="fam-auto-total" class="auto-total">0</td>
+                <td class="check"><input type="checkbox" onclick="updateFault(this)"></td>
+                <td class="fault">FAULT</td>
+            </tr>
+
+            <tr>
+                <td>7104 PFO</td>
+                <td id="pfo-count">0</td>
+                <td><button class="btn" onclick="updateCount('pfo-count', -1)">-1</button></td>
+                <td><button class="btn" onclick="updateCount('pfo-count', 1)">+1</button></td>
+                <td id="PFO-loose-boxes">0</td>
+                <td>
+                    <button class="btn" onclick="updateCount('PFO-loose-boxes', -1)">-1</button>
+                    <button class="btn" onclick="updateCount('PFO-loose-boxes', 1)">+1</button>
+                </td>
+                <td id="pfo-auto-total" class="auto-total">0</td>
+                <td class="check"><input type="checkbox" onclick="updateFault(this)"></td>
+                <td class="fault">FAULT</td>
+            </tr>
+
+            <tr>
+                <td>7115 CW</td>
+                <td id="cw-count">0</td>
+                <td><button class="btn" onclick="updateCount('cw-count', -1)">-1</button></td>
+                <td><button class="btn" onclick="updateCount('cw-count', 1)">+1</button></td>
+                <td id="CW-loose-boxes">0</td>
+                <td>
+                    <button class="btn" onclick="updateCount('CW-loose-boxes', -1)">-1</button>
+                    <button class="btn" onclick="updateCount('CW-loose-boxes', 1)">+1</button>
+                </td>
+                <td id="cw-auto-total" class="auto-total">0</td>
+                <td class="check"><input type="checkbox" onclick="updateFault(this)"></td>
+                <td class="fault">FAULT</td>
+            </tr>
+
+        </tbody>
+    </table>
+    <div class="delete">
+        <button onclick="deleteEntries()">DELETE ENTRIES</button>
+    </div>
+    <script>
+        // Function to update Count and Loose Boxes
+        function changeCount(id, value) {
+            const element = document.getElementById(id);
+            let currentValue = parseInt(element.innerText) || 0;
+            currentValue += value;
+            if (currentValue < 0) currentValue = 0; // Prevent negative values
+            element.innerText = currentValue;
+
+            // Automatically update Auto Total for relevant rows
+            updateAutoTotal(id);
+        }
+
+        function updateAutoTotal(countId, manualId) {
+            const countElement = document.getElementById(countId);
+            const manualElement = document.getElementById(manualId);
+            const totalElement = document.getElementById(`${countId.split('-')[0]}-auto-total`);
+
+            const count = parseInt(countElement.innerText) || 0;
+            const manual = parseInt(manualElement.innerText) || 0;
+
+            totalElement.innerText = count + manual;
+        }
+        // Set the current date
+        document.addEventListener("DOMContentLoaded", () => {
+            const dateInput = document.getElementById("current-date");
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, "0");
+            const dd = String(today.getDate()).padStart(2, "0");
+            dateInput.value = `${yyyy}-${mm}-${dd}`;
+        });
+
+
+        function incrementCount(countId, manualId) {
+            const countElement = document.getElementById(countId);
+            let count = parseInt(countElement.innerText) || 0;
+            countElement.innerText = ++count;
+            updateAutoTotal(countId, manualId);
+        }
+
+        function decrementCount(countId, manualId) {
+            const countElement = document.getElementById(countId);
+            let count = parseInt(countElement.innerText) || 0;
+            if (count > 0) countElement.innerText = --count;
+            updateAutoTotal(countId, manualId);
+        }
+
+        function incrementManual(manualId, countId) {
+            const manualElement = document.getElementById(manualId);
+            let manual = parseInt(manualElement.innerText) || 0;
+            manualElement.innerText = ++manual;
+            updateAutoTotal(countId, manualId);
+        }
+
+        function decrementManual(manualId, countId) {
+            const manualElement = document.getElementById(manualId);
+            let manual = parseInt(manualElement.innerText) || 0;
+            if (manual > 0) manualElement.innerText = --manual;
+            updateAutoTotal(countId, manualId);
+        }
+
+        function deleteEntries() {
+    // Reset all count and loose boxes values in the tbody
+    const counts = document.querySelectorAll('tbody td[id$="-count"], tbody td[id$="-boxes"]');
+    counts.forEach(td => td.innerText = '0');
+
+    // Uncheck all checkboxes in the tbody
+    const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+    checkboxes.forEach(checkbox => checkbox.checked = false);
+
+    // Reset all fault cells in the tbody
+    const faults = document.querySelectorAll('tbody td.fault');
+    faults.forEach(fault => {
+        fault.innerText = 'FAULT';
+        fault.classList.remove('good');
+    });
+
+    // Clear all auto-total values in the tbody
+    const autoTotals = document.querySelectorAll('tbody td.auto-total:not([style*="grey"])');
+    autoTotals.forEach(autoTotal => autoTotal.innerText = '0');
+
+    // Ensure titles remain unchanged
+    const autoTotalTitle = document.querySelector('.auto-total[style*="grey"]'); // "AUTO TOTAL" in the header row
+    const autoTitle = document.querySelector('.fault[style*="grey"]'); // "AUTO" in the header row
+
+    if (autoTotalTitle) {
+        autoTotalTitle.innerText = "AUTO TOTAL"; // Ensure "AUTO TOTAL" title remains
+    }
+
+    if (autoTitle) {
+        autoTitle.innerText = "AUTO"; // Ensure "AUTO" title remains
+    }
+}
+
+
+
+        function updateFault(checkbox) {
+            const faultCell = checkbox.closest('tr').querySelector('.fault');
+            if (checkbox.checked) {
+                faultCell.innerText = 'GOOD';
+                faultCell.classList.add('good');
+            } else {
+                faultCell.innerText = 'FAULT';
+                faultCell.classList.remove('good');
+            }
+        }
+
+        const faultCell = document.querySelector('thead tr .fault');
+
+        if (faultCell) {
+            console.log('Selected FAULT cell:', faultCell);
+
+
+            faultCell.style.backgroundColor = 'f0f0f0';
+            faultCell.style.color = 'f0f0f0';
+        }
+
+        function updateCount(id, change) {
+            const element = document.getElementById(id);
+            const currentValue = parseInt(element.innerText);
+            const newValue = Math.max(currentValue + change, 0);
+            element.innerText = newValue;
+
+            const category = id.split('-')[0]; // Extract category like 'nic', 'lak'
+            updateAutoTotal(category);
+        }
+
+        function updateAutoTotal(category) {
+            const countElement = document.getElementById(`${category}-count`);
+            const looseBoxesElement = document.getElementById(`${category.toUpperCase()}-loose-boxes`);
+            const autoTotalElement = document.getElementById(`${category}-auto-total`);
+
+            const countValue = parseInt(countElement.innerText) || 0;
+            const looseBoxesValue = parseInt(looseBoxesElement.innerText) || 0;
+
+            autoTotalElement.innerText = countValue + looseBoxesValue;
+        }
+
+    </script>
+</body>
+
+</html>
