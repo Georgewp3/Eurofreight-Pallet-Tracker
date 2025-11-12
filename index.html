@@ -1,300 +1,533 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Pallet Tracking</title>
-<style>
-  :root{
-    --bg:#f3f5f7; --card:#ffffff; --text:#1f2937; --muted:#6b7280; --line:#e5e7eb;
-    --green:#2fb34e; --green-pressed:#22903c; --header:#2f3b4a; --subhead:#6b6f75;
-    --fault:#e11d48; --ok:#10b981; --row-h:46px;
-  }
-  *{box-sizing:border-box}
-  body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif; color:var(--text); background:var(--bg); }
-  .wrap{ max-width:1200px; margin:24px auto 64px; padding:0 16px; }
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Pallet Tracking</title>
+    <style>
+        :root {
+            --bg: #f3f5f7;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --green: #2fb34e;
+            --green-pressed: #22903c;
+            --header: #2f3b4a;
+            --subhead: #6b6f75;
+            --fault: #e11d48;
+            --ok: #10b981;
+            --row-h: 46px;
+        }
 
-  .top{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px; margin-bottom:18px; }
-  .top h1{ margin:0; text-align:center; font-size:36px; font-weight:800; }
-  .meta{ display:flex; align-items:center; gap:18px; justify-self:end; }
-  .left-meta{ display:flex; align-items:center; gap:12px; justify-self:start; }
-  label{ font-weight:700; font-size:14px; color:var(--text); }
-  input[type="date"], input[type="text"], input[type="number"]{
-    height:36px; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:#fff; color:var(--text); outline:none;
-  }
-  input[type="text"], input[type="number"]{ width:140px; }
+        * {
+            box-sizing: border-box
+        }
 
-  .table-card{ background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; box-shadow:0 4px 10px rgba(0,0,0,.04); }
-  table{ width:100%; border-collapse:collapse; table-layout:fixed; }
-  thead tr th{
-    background:var(--green); color:#fff; font-weight:800; letter-spacing:.2px; border-right:1px solid rgba(255,255,255,.18);
-    height:48px; font-size:14px;
-  }
-  thead tr th:last-child{border-right:0}
-  tbody td, tbody th{ border-top:1px solid var(--line); height:var(--row-h); font-size:15px; }
-  tbody th{ font-weight:700; text-align:left; padding:0 14px; }
-  tbody td{ text-align:center; padding:0 8px; }
-  .num{ font-variant-numeric:tabular-nums; font-weight:700; }
-  .pill{
-    display:inline-flex; align-items:center; justify-content:center; min-width:36px; height:30px; padding:0 10px; border-radius:8px;
-    border:none; background:var(--green); color:#fff; font-weight:800; cursor:pointer; user-select:none; transition:transform .02s, background .12s;
-  }
-  .pill:active{ transform:translateY(1px); background:var(--green-pressed); }
-  .pill.small{ min-width:30px; height:28px; font-size:14px; }
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+        }
 
-  .subhead td{ background:var(--subhead); color:#fff; font-weight:800; border-top:1px solid #555b62; height:44px; }
-  .subhead td.blank{ background:#fff; border-top:1px solid var(--line); }
+        .wrap {
+            max-width: 1200px;
+            margin: 24px auto 64px;
+            padding: 0 16px;
+        }
 
-  .status{ font-weight:900; letter-spacing:.2px; }
-  .status.fault{ color:var(--fault); } .status.ok{ color:var(--ok); }
+        .top {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
 
-  .tick{ display:flex; align-items:center; justify-content:center; } .tick input{ width:18px; height:18px; cursor:pointer; }
+        .top h1 {
+            margin: 0;
+            text-align: center;
+            font-size: 36px;
+            font-weight: 800;
+        }
 
-  .actions{ display:flex; justify-content:center; margin-top:18px; }
-  .danger{ background:#ef233c; color:#fff; border:none; border-radius:8px; padding:12px 18px; font-weight:900; cursor:pointer; box-shadow:0 6px 16px rgba(239,35,60,.25); }
-  .danger:active{ transform:translateY(1px); }
+        .meta {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            justify-self: end;
+        }
 
-  col.c1{ width:32%; } col.c2{ width:8%; } col.c3{ width:7%; } col.c4{ width:7%; }
-  col.c5{ width:18%; } col.c6{ width:12%; } col.c7{ width:8%; } col.c8{ width:6%; } col.c9{ width:12%; }
+        .left-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            justify-self: start;
+        }
 
-  @media (max-width:980px){
-    .top{ grid-template-columns:1fr; } .top h1{ order:-1; margin-bottom:6px; }
-    .left-meta, .meta{ justify-self:start; flex-wrap:wrap; } input[type="text"], input[type="number"]{ width:110px; }
-  }
-</style>
+        label {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        input[type="date"],
+        input[type="text"],
+        input[type="number"] {
+            height: 36px;
+            padding: 6px 10px;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            background: #fff;
+            color: var(--text);
+            outline: none;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 140px;
+        }
+
+        .table-card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, .04);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        thead tr th {
+            background: var(--green);
+            color: #fff;
+            font-weight: 800;
+            letter-spacing: .2px;
+            border-right: 1px solid rgba(255, 255, 255, .18);
+            height: 48px;
+            font-size: 14px;
+        }
+
+        thead tr th:last-child {
+            border-right: 0
+        }
+
+        tbody td,
+        tbody th {
+            border-top: 1px solid var(--line);
+            height: var(--row-h);
+            font-size: 15px;
+        }
+
+        tbody th {
+            font-weight: 700;
+            text-align: left;
+            padding: 0 14px;
+        }
+
+        tbody td {
+            text-align: center;
+            padding: 0 8px;
+        }
+
+        .num {
+            font-variant-numeric: tabular-nums;
+            font-weight: 700;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 30px;
+            padding: 0 10px;
+            border-radius: 8px;
+            border: none;
+            background: var(--green);
+            color: #fff;
+            font-weight: 800;
+            cursor: pointer;
+            user-select: none;
+            transition: transform .02s, background .12s;
+        }
+
+        .pill:active {
+            transform: translateY(1px);
+            background: var(--green-pressed);
+        }
+
+        .pill.small {
+            min-width: 30px;
+            height: 28px;
+            font-size: 14px;
+        }
+
+        .subhead td {
+            background: var(--subhead);
+            color: #fff;
+            font-weight: 800;
+            border-top: 1px solid #555b62;
+            height: 44px;
+        }
+
+        .subhead td.blank {
+            background: #fff;
+            border-top: 1px solid var(--line);
+        }
+
+        .status {
+            font-weight: 900;
+            letter-spacing: .2px;
+        }
+
+        .status.fault {
+            color: var(--fault);
+        }
+
+        .status.ok {
+            color: var(--ok);
+        }
+
+        .tick {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tick input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 18px;
+        }
+
+        .danger {
+            background: #ef233c;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(239, 35, 60, .25);
+        }
+
+        .danger:active {
+            transform: translateY(1px);
+        }
+
+        col.c1 {
+            width: 32%;
+        }
+
+        col.c2 {
+            width: 8%;
+        }
+
+        col.c3 {
+            width: 7%;
+        }
+
+        col.c4 {
+            width: 7%;
+        }
+
+        col.c5 {
+            width: 18%;
+        }
+
+        col.c6 {
+            width: 12%;
+        }
+
+        col.c7 {
+            width: 8%;
+        }
+
+        col.c8 {
+            width: 6%;
+        }
+
+        col.c9 {
+            width: 12%;
+        }
+
+        @media (max-width:980px) {
+            .top {
+                grid-template-columns: 1fr;
+            }
+
+            .top h1 {
+                order: -1;
+                margin-bottom: 6px;
+            }
+
+            .left-meta,
+            .meta {
+                justify-self: start;
+                flex-wrap: wrap;
+            }
+
+            input[type="text"],
+            input[type="number"] {
+                width: 110px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="top">
-      <div class="left-meta">
-        <label for="date">DATE:</label>
-        <input id="date" type="date" />
-      </div>
-      <h1>Pallet Tracking</h1>
-      <div class="meta">
-        <label for="week">WEEK:</label>
-        <input id="week" type="number" min="1" step="1" />
-        <label for="container">CONTAINER ID:</label>
-        <input id="container" type="text" />
-      </div>
+    <div class="wrap">
+        <div class="top">
+            <div class="left-meta">
+                <label for="date">DATE:</label>
+                <input id="date" type="date" />
+            </div>
+            <h1>Pallet Tracking</h1>
+            <div class="meta">
+                <label for="week">WEEK:</label>
+                <input id="week" type="number" min="1" step="1" />
+                <label for="container">CONTAINER ID:</label>
+                <input id="container" type="text" />
+            </div>
+        </div>
+
+        <div class="table-card">
+            <table id="palletTable" aria-label="Pallet Tracking Table">
+                <colgroup>
+                    <col class="c1">
+                    <col class="c2">
+                    <col class="c3">
+                    <col class="c4">
+                    <col class="c5">
+                    <col class="c6">
+                    <col class="c7">
+                    <col class="c8">
+                    <col class="c9">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Count</th>
+                        <th>-1</th>
+                        <th>+1</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </div>
+
+        <div class="actions">
+            <button class="danger" id="reset">DELETE ENTRIES</button>
+        </div>
     </div>
 
-    <div class="table-card">
-      <table id="palletTable" aria-label="Pallet Tracking Table">
-        <colgroup>
-          <col class="c1"><col class="c2"><col class="c3"><col class="c4">
-          <col class="c5"><col class="c6"><col class="c7"><col class="c8"><col class="c9">
-        </colgroup>
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>Count</th>
-            <th>-1</th>
-            <th>+1</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
+    <script>
+        (function () {
+            /* ---------------- Data model ---------------- */
+            const CATEGORIES_BEFORE = [
+                "LOOSE",
+                "ΕΛΑΦΡΙΟΥ ΤΥΠΟΥ",
+                "ΒΑΡΕΤΟΥ ΤΥΠΟΥ",
+                "BULK",
+                "EURO",
+                "HALF PALLET",
+                "MIX"
+            ];
+            const SKU_LIST = [
+                "7101 NIC", "7110 LAK", "7120 LIM", "7150 LCA", "7140 FAM", "7104 PFO", "7115 CW"
+            ];
+            const STORAGE_KEY = "pallet-tracking-v1";
 
-    <div class="actions">
-      <button class="danger" id="reset">DELETE ENTRIES</button>
-    </div>
-  </div>
+            function defaultDateState() {
+                const counts = {}; const loose = {}; const check = {};
+                [...CATEGORIES_BEFORE, ...SKU_LIST].forEach(k => counts[k] = 0);
+                SKU_LIST.forEach(k => { loose[k] = 0; check[k] = false; });
+                return { counts, loose, check, week: "", container: "" };
+            }
+            function getAll() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; } }
+            function saveAll(obj) { localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); }
+            function getState(dateKey) { const all = getAll(); if (!all[dateKey]) { all[dateKey] = defaultDateState(); saveAll(all); } return all[dateKey]; }
+            function setState(dateKey, st) { const all = getAll(); all[dateKey] = st; saveAll(all); }
 
-<script>
-(function(){
-  /* ---------------- Data model ---------------- */
-  const CATEGORIES_BEFORE = [
-    "LOOSE",
-    "ΕΛΑΦΡΙΟΥ ΤΥΠΟΥ",
-    "ΒΑΡΕΤΟΥ ΤΥΠΟΥ",
-    "BULK",
-    "EURO",
-    "HALF PALLET",
-    "MIX"
-  ];
-  const SKU_LIST = [
-    "7101 NIC","7110 LAK","7120 LIM","7150 LCA","7140 FAM","7104 PFO","7115 CW"
-  ];
-  const STORAGE_KEY = "pallet-tracking-v1";
+            /* ---------------- DOM helpers ---------------- */
+            const $ = s => document.querySelector(s);
+            const tbody = $("#tbody");
+            function todayISO() { const d = new Date(), m = String(d.getMonth() + 1).padStart(2, "0"), day = String(d.getDate()).padStart(2, "0"); return `${d.getFullYear()}-${m}-${day}`; }
+            let dateKey = todayISO();
+            $("#date").value = dateKey;
 
-  function defaultDateState(){
-    const counts = {}; const loose = {}; const check = {};
-    [...CATEGORIES_BEFORE, ...SKU_LIST].forEach(k => counts[k]=0);
-    SKU_LIST.forEach(k => { loose[k]=0; check[k]=false; });
-    return { counts, loose, check, week:"", container:"" };
-  }
-  function getAll(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }catch{ return {}; } }
-  function saveAll(obj){ localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); }
-  function getState(dateKey){ const all=getAll(); if(!all[dateKey]){ all[dateKey]=defaultDateState(); saveAll(all);} return all[dateKey]; }
-  function setState(dateKey, st){ const all=getAll(); all[dateKey]=st; saveAll(all); }
+            /* ---------------- Rendering ---------------- */
+            function render() {
+                const s = getState(dateKey);
+                $("#week").value = s.week || "";
+                $("#container").value = s.container || "";
+                tbody.innerHTML = "";
 
-  /* ---------------- DOM helpers ---------------- */
-  const $ = s=>document.querySelector(s);
-  const tbody = $("#tbody");
-  function todayISO(){ const d=new Date(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0"); return `${d.getFullYear()}-${m}-${day}`; }
-  let dateKey = todayISO();
-  $("#date").value = dateKey;
+                CATEGORIES_BEFORE.forEach(cat => tbody.appendChild(rowLeftOnly(cat, s)));
 
-  /* ---------------- Rendering ---------------- */
-  function render(){
-    const s = getState(dateKey);
-    $("#week").value = s.week || "";
-    $("#container").value = s.container || "";
-    tbody.innerHTML = "";
+                tbody.appendChild(subheaderRow());
 
-    CATEGORIES_BEFORE.forEach(cat => tbody.appendChild(rowLeftOnly(cat, s)));
+                SKU_LIST.forEach(cat => tbody.appendChild(rowFull(cat, s)));
+            }
 
-    tbody.appendChild(subheaderRow());
+            function subheaderRow() {
+                const tr = document.createElement("tr"); tr.className = "subhead";
+                tr.appendChild(tdBlank()); tr.appendChild(tdBlank()); tr.appendChild(tdBlank()); tr.appendChild(tdBlank());
+                tr.appendChild(newTD("LOOSE BOXES"));
+                tr.appendChild(newTD("MANUAL"));
+                tr.appendChild(newTD("AUTO TOTAL"));
+                tr.appendChild(newTD("CHECK"));
+                tr.appendChild(newTD("AUTO"));
+                return tr;
+            }
+            function tdBlank() { const td = document.createElement("td"); td.className = "blank"; return td; }
+            function newTD(t) { const td = document.createElement("td"); td.textContent = t; return td; }
 
-    SKU_LIST.forEach(cat => tbody.appendChild(rowFull(cat, s)));
-  }
+            function btn(label, cls, onClick) {
+                const b = document.createElement("button");
+                b.type = "button"; b.className = "pill " + (cls || ""); b.textContent = label; b.addEventListener("click", onClick);
+                return b;
+            }
+            function cellNumber(val) { const td = document.createElement("td"); td.className = "num"; td.textContent = String(val); return td; }
+            function tdButton(label, onClick) { const td = document.createElement("td"); td.appendChild(btn(label === "-" ? "-1" : "+1", "", onClick)); return td; }
 
-  function subheaderRow(){
-    const tr=document.createElement("tr"); tr.className="subhead";
-    tr.appendChild(tdBlank()); tr.appendChild(tdBlank()); tr.appendChild(tdBlank()); tr.appendChild(tdBlank());
-    tr.appendChild(newTD("LOOSE BOXES"));
-    tr.appendChild(newTD("MANUAL"));
-    tr.appendChild(newTD("AUTO TOTAL"));
-    tr.appendChild(newTD("CHECK"));
-    tr.appendChild(newTD("AUTO"));
-    return tr;
-  }
-  function tdBlank(){ const td=document.createElement("td"); td.className="blank"; return td; }
-  function newTD(t){ const td=document.createElement("td"); td.textContent=t; return td; }
+            function rowLeftOnly(cat, state) {
+                const tr = document.createElement("tr");
+                const th = document.createElement("th"); th.textContent = cat; tr.appendChild(th);
+                const countCell = cellNumber(state.counts[cat] ?? 0); countCell.dataset.key = cat; tr.appendChild(countCell);
+                tr.appendChild(tdButton("-", () => changeCount(cat, -1)));
+                tr.appendChild(tdButton("+", () => changeCount(cat, +1)));
+                for (let i = 0; i < 5; i++) tr.appendChild(document.createElement("td"));
+                return tr;
+            }
 
-  function btn(label, cls, onClick){
-    const b=document.createElement("button");
-    b.type="button"; b.className="pill "+(cls||""); b.textContent=label; b.addEventListener("click", onClick);
-    return b;
-  }
-  function cellNumber(val){ const td=document.createElement("td"); td.className="num"; td.textContent=String(val); return td; }
-  function tdButton(label, onClick){ const td=document.createElement("td"); td.appendChild(btn(label==="-"?"-1":"+1","",onClick)); return td; }
+            function rowFull(cat, state) {
+                const tr = document.createElement("tr");
+                const th = document.createElement("th"); th.textContent = cat; tr.appendChild(th);
 
-  function rowLeftOnly(cat, state){
-    const tr=document.createElement("tr");
-    const th=document.createElement("th"); th.textContent=cat; tr.appendChild(th);
-    const countCell=cellNumber(state.counts[cat] ?? 0); countCell.dataset.key=cat; tr.appendChild(countCell);
-    tr.appendChild(tdButton("-", ()=>changeCount(cat,-1)));
-    tr.appendChild(tdButton("+", ()=>changeCount(cat,+1)));
-    for(let i=0;i<5;i++) tr.appendChild(document.createElement("td"));
-    return tr;
-  }
+                const countCell = cellNumber(state.counts[cat] ?? 0); countCell.dataset.key = cat; tr.appendChild(countCell);
+                tr.appendChild(tdButton("-", () => changeCount(cat, -1)));
+                tr.appendChild(tdButton("+", () => changeCount(cat, +1)));
 
-  function rowFull(cat, state){
-    const tr=document.createElement("tr");
-    const th=document.createElement("th"); th.textContent=cat; tr.appendChild(th);
+                // LOOSE BOXES (editable on click)
+                const looseCell = cellNumber(state.loose[cat] ?? 0);
+                looseCell.style.cursor = "text"; looseCell.title = "Click to edit";
+                looseCell.addEventListener("click", () => {
+                    const cur = Number(getState(dateKey).loose[cat] ?? 0);
+                    const input = prompt(`Set LOOSE BOXES for ${cat}:`, String(cur));
+                    if (input === null) return;
+                    const val = Number(input);
+                    if (Number.isFinite(val) && val >= 0) {
+                        const s = getState(dateKey); s.loose[cat] = Math.trunc(val); setState(dateKey, s); updateSkuRow(cat);
+                    }
+                });
+                tr.appendChild(looseCell);
 
-    const countCell=cellNumber(state.counts[cat] ?? 0); countCell.dataset.key=cat; tr.appendChild(countCell);
-    tr.appendChild(tdButton("-", ()=>changeCount(cat,-1)));
-    tr.appendChild(tdButton("+", ()=>changeCount(cat,+1)));
+                // MANUAL buttons now modify LOOSE BOXES
+                const manualTd = document.createElement("td");
+                manualTd.appendChild(btn("-1", "small", () => changeLoose(cat, -1)));
+                manualTd.appendChild(document.createTextNode(" "));
+                manualTd.appendChild(btn("+1", "small", () => changeLoose(cat, +1)));
+                tr.appendChild(manualTd);
 
-    // LOOSE BOXES (editable on click)
-    const looseCell=cellNumber(state.loose[cat] ?? 0);
-    looseCell.style.cursor="text"; looseCell.title="Click to edit";
-    looseCell.addEventListener("click", ()=>{
-      const cur = Number(getState(dateKey).loose[cat] ?? 0);
-      const input = prompt(`Set LOOSE BOXES for ${cat}:`, String(cur));
-      if(input===null) return;
-      const val = Number(input);
-      if(Number.isFinite(val) && val>=0){
-        const s=getState(dateKey); s.loose[cat]=Math.trunc(val); setState(dateKey,s); updateSkuRow(cat);
-      }
-    });
-    tr.appendChild(looseCell);
+                // AUTO TOTAL = Count + Loose Boxes
+                const autoCell = cellNumber(calcAutoTotal(cat));
+                autoCell.dataset.autoFor = cat;
+                tr.appendChild(autoCell);
 
-    // MANUAL buttons now modify LOOSE BOXES
-    const manualTd=document.createElement("td");
-    manualTd.appendChild(btn("-1","small", ()=>changeLoose(cat,-1)));
-    manualTd.appendChild(document.createTextNode(" "));
-    manualTd.appendChild(btn("+1","small", ()=>changeLoose(cat,+1)));
-    tr.appendChild(manualTd);
+                // CHECK
+                const chkTd = document.createElement("td"); chkTd.className = "tick";
+                const chk = document.createElement("input"); chk.type = "checkbox"; chk.checked = !!state.check[cat];
+                chk.addEventListener("change", () => { const s = getState(dateKey); s.check[cat] = chk.checked; setState(dateKey, s); updateSkuRow(cat); });
+                chkTd.appendChild(chk); tr.appendChild(chkTd);
 
-    // AUTO TOTAL = Count + Loose Boxes
-    const autoCell=cellNumber(calcAutoTotal(cat));
-    autoCell.dataset.autoFor=cat;
-    tr.appendChild(autoCell);
+                // AUTO status (OK when checked; else FAULT)
+                const statusTd = document.createElement("td"); statusTd.dataset.statusFor = cat; tr.appendChild(statusTd);
+                paintStatus(cat, statusTd);
 
-    // CHECK
-    const chkTd=document.createElement("td"); chkTd.className="tick";
-    const chk=document.createElement("input"); chk.type="checkbox"; chk.checked=!!state.check[cat];
-    chk.addEventListener("change", ()=>{ const s=getState(dateKey); s.check[cat]=chk.checked; setState(dateKey,s); updateSkuRow(cat); });
-    chkTd.appendChild(chk); tr.appendChild(chkTd);
+                return tr;
+            }
 
-    // AUTO status (OK when checked; else FAULT)
-    const statusTd=document.createElement("td"); statusTd.dataset.statusFor=cat; tr.appendChild(statusTd);
-    paintStatus(cat, statusTd);
+            /* ---------------- Mutations ---------------- */
+            function changeCount(cat, delta) {
+                const s = getState(dateKey);
+                const cur = s.counts[cat] ?? 0;
+                s.counts[cat] = Math.max(0, cur + delta);
+                setState(dateKey, s);
+                updateLeftCount(cat);
+                if (SKU_LIST.includes(cat)) updateSkuRow(cat);
+            }
+            // MANUAL +/- modifies LOOSE BOXES
+            function changeLoose(cat, delta) {
+                const s = getState(dateKey);
+                const cur = s.loose[cat] ?? 0;
+                s.loose[cat] = Math.max(0, cur + delta);
+                setState(dateKey, s);
+                updateSkuRow(cat);
+            }
 
-    return tr;
-  }
+            /* ---------------- Repaint helpers ---------------- */
+            function updateLeftCount(cat) {
+                const cell = tbody.querySelector(`td[data-key="${cssEscape(cat)}"]`);
+                if (cell) { const s = getState(dateKey); cell.textContent = String(s.counts[cat] ?? 0); }
+            }
+            function calcAutoTotal(cat) {
+                const s = getState(dateKey);
+                const main = s.counts[cat] ?? 0;
+                const loose = s.loose[cat] ?? 0;
+                return main + loose; // per requirement
+            }
+            function paintStatus(cat, td) {
+                const s = getState(dateKey);
+                const ok = !!s.check[cat]; // OK only when checked
+                td.className = "status " + (ok ? "ok" : "fault");
+                td.textContent = ok ? "OK" : "FAULT";
+                const autoCell = tbody.querySelector(`td[data-auto-for="${cssEscape(cat)}"]`);
+                if (autoCell) autoCell.textContent = String(calcAutoTotal(cat));
+            }
+            function updateSkuRow(cat) {
+                const rows = [...tbody.querySelectorAll("tr")];
+                const row = rows.find(r => r.firstChild && r.firstChild.tagName === "TH" && r.firstChild.textContent === cat);
+                if (!row) return;
+                const s = getState(dateKey);
+                const nums = row.querySelectorAll(".num"); // [count, loose, auto]
+                if (nums[0]) nums[0].textContent = String(s.counts[cat] ?? 0);
+                if (nums[1]) nums[1].textContent = String(s.loose[cat] ?? 0);
+                const statusTd = row.querySelector('td[data-status-for]');
+                paintStatus(cat, statusTd);
+            }
+            function cssEscape(str) { return str.replace(/["\\]/g, "\\$&"); }
 
-  /* ---------------- Mutations ---------------- */
-  function changeCount(cat, delta){
-    const s=getState(dateKey);
-    const cur=s.counts[cat] ?? 0;
-    s.counts[cat] = Math.max(0, cur+delta);
-    setState(dateKey,s);
-    updateLeftCount(cat);
-    if(SKU_LIST.includes(cat)) updateSkuRow(cat);
-  }
-  // MANUAL +/- modifies LOOSE BOXES
-  function changeLoose(cat, delta){
-    const s=getState(dateKey);
-    const cur=s.loose[cat] ?? 0;
-    s.loose[cat] = Math.max(0, cur+delta);
-    setState(dateKey,s);
-    updateSkuRow(cat);
-  }
+            /* ---------------- Inputs ---------------- */
+            $("#date").addEventListener("change", e => { dateKey = e.target.value || todayISO(); getState(dateKey); render(); });
+            $("#week").addEventListener("input", e => { const s = getState(dateKey); s.week = e.target.value; setState(dateKey, s); });
+            $("#container").addEventListener("input", e => { const s = getState(dateKey); s.container = e.target.value; setState(dateKey, s); });
+            $("#reset").addEventListener("click", () => {
+                if (!confirm("Delete all entries for this date?")) return;
+                const all = getAll(); all[dateKey] = defaultDateState(); saveAll(all); render();
+            });
 
-  /* ---------------- Repaint helpers ---------------- */
-  function updateLeftCount(cat){
-    const cell = tbody.querySelector(`td[data-key="${cssEscape(cat)}"]`);
-    if(cell){ const s=getState(dateKey); cell.textContent=String(s.counts[cat] ?? 0); }
-  }
-  function calcAutoTotal(cat){
-    const s=getState(dateKey);
-    const main = s.counts[cat] ?? 0;
-    const loose = s.loose[cat] ?? 0;
-    return main + loose; // per requirement
-  }
-  function paintStatus(cat, td){
-    const s=getState(dateKey);
-    const ok = !!s.check[cat]; // OK only when checked
-    td.className = "status " + (ok ? "ok":"fault");
-    td.textContent = ok ? "OK" : "FAULT";
-    const autoCell = tbody.querySelector(`td[data-auto-for="${cssEscape(cat)}"]`);
-    if(autoCell) autoCell.textContent = String(calcAutoTotal(cat));
-  }
-  function updateSkuRow(cat){
-    const rows=[...tbody.querySelectorAll("tr")];
-    const row = rows.find(r => r.firstChild && r.firstChild.tagName==="TH" && r.firstChild.textContent===cat);
-    if(!row) return;
-    const s=getState(dateKey);
-    const nums=row.querySelectorAll(".num"); // [count, loose, auto]
-    if(nums[0]) nums[0].textContent = String(s.counts[cat] ?? 0);
-    if(nums[1]) nums[1].textContent = String(s.loose[cat] ?? 0);
-    const statusTd=row.querySelector('td[data-status-for]');
-    paintStatus(cat, statusTd);
-  }
-  function cssEscape(str){ return str.replace(/["\\]/g,"\\$&"); }
-
-  /* ---------------- Inputs ---------------- */
-  $("#date").addEventListener("change", e=>{ dateKey=e.target.value||todayISO(); getState(dateKey); render(); });
-  $("#week").addEventListener("input", e=>{ const s=getState(dateKey); s.week=e.target.value; setState(dateKey,s); });
-  $("#container").addEventListener("input", e=>{ const s=getState(dateKey); s.container=e.target.value; setState(dateKey,s); });
-  $("#reset").addEventListener("click", ()=>{
-    if(!confirm("Delete all entries for this date?")) return;
-    const all=getAll(); all[dateKey]=defaultDateState(); saveAll(all); render();
-  });
-
-  render();
-})();
-</script>
+            render();
+        })();
+    </script>
 </body>
+
 </html>
