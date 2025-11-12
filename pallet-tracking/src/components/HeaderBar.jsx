@@ -5,11 +5,13 @@ import { weekOfYear } from "../utils/weekOfYear";
 export default function HeaderBar() {
     const { meta, setMeta } = usePalletStore();
 
+    // auto-calc ISO week when date changes (once on mount too)
     useEffect(() => {
-        if (!meta.week) {
+        if (meta?.date) {
             const w = weekOfYear(new Date(meta.date));
-            setMeta({ week: String(w) });
+            if (String(w) !== String(meta.week)) setMeta({ week: String(w) });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [meta.date]);
 
     return (
@@ -18,6 +20,7 @@ export default function HeaderBar() {
                 <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Pallet Tracking</h1>
                 <p className="text-sm text-neutral-500">Eurofreight • Larnaca Unit</p>
             </div>
+
             <div className="grid grid-cols-2 md:flex gap-3">
                 <label className="flex flex-col text-sm">
                     <span className="text-neutral-500">Date</span>
@@ -28,6 +31,7 @@ export default function HeaderBar() {
                         className="rounded-xl border border-neutral-300 px-3 py-2 bg-white shadow-sm"
                     />
                 </label>
+
                 <label className="flex flex-col text-sm">
                     <span className="text-neutral-500">Week</span>
                     <input
@@ -39,6 +43,7 @@ export default function HeaderBar() {
                         placeholder="e.g. 49"
                     />
                 </label>
+
                 <label className="col-span-2 md:col-span-1 flex flex-col text-sm">
                     <span className="text-neutral-500">Container ID</span>
                     <input

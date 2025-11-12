@@ -1,3 +1,4 @@
+// ISO-8601 week number
 export function weekOfYear(date) {
   const d = new Date(
     Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())

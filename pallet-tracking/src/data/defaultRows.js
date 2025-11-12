@@ -40,7 +40,6 @@ export const defaultRows = [
     check: false,
   },
 
-  // SKUs (match your screenshot vibe)
   {
     id: "sku-7101-nic",
     label: "7101 NIC",

@@ -6,8 +6,8 @@ import StatsBar from "./components/StatsBar";
 import { usePalletStore } from "./store/usePalletStore";
 
 export default function App() {
-  const init = usePalletStore(s => s.init);
-  useEffect(() => { init(); }, []);
+  const init = usePalletStore((s) => s.init);
+  useEffect(() => { init(); }, [init]);
 
   return (
     <div className="min-h-screen bg-neutral-50">

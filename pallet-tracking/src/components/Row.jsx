@@ -3,14 +3,16 @@ import clsx from "clsx";
 
 export default function Row({ row }) {
     const { inc, toggleCheck } = usePalletStore();
-    const autoTotal = row.looseBoxes;               // define auto = loose boxes
-    const statusOk = row.manual === autoTotal;
+    const autoTotal = row.looseBoxes;           // define AUTO as loose boxes
+    const statusOk = Number(row.manual) === Number(autoTotal);
 
-    const CellBtn = ({ onClick, children }) => (
+    const Btn = ({ onClick, children }) => (
         <button
             onClick={onClick}
             className="rounded-xl bg-neutral-100 hover:bg-neutral-200 px-3 py-1 text-sm font-semibold shadow-inner"
-        >{children}</button>
+        >
+            {children}
+        </button>
     );
 
     return (
@@ -18,12 +20,12 @@ export default function Row({ row }) {
             <td className="py-3 px-3 text-sm font-medium text-neutral-800">{row.label}</td>
 
             <td className="text-center">{row.looseBoxes}</td>
-            <td className="text-center"><CellBtn onClick={() => inc(row.id, "looseBoxes", -1)}>-1</CellBtn></td>
-            <td className="text-center"><CellBtn onClick={() => inc(row.id, "looseBoxes", +1)}>+1</CellBtn></td>
+            <td className="text-center"><Btn onClick={() => inc(row.id, "looseBoxes", -1)}>-1</Btn></td>
+            <td className="text-center"><Btn onClick={() => inc(row.id, "looseBoxes", +1)}>+1</Btn></td>
 
             <td className="text-center">{row.manual}</td>
-            <td className="text-center"><CellBtn onClick={() => inc(row.id, "manual", -1)}>-1</CellBtn></td>
-            <td className="text-center"><CellBtn onClick={() => inc(row.id, "manual", +1)}>+1</CellBtn></td>
+            <td className="text-center"><Btn onClick={() => inc(row.id, "manual", -1)}>-1</Btn></td>
+            <td className="text-center"><Btn onClick={() => inc(row.id, "manual", +1)}>+1</Btn></td>
 
             <td className="text-center">{autoTotal}</td>
 

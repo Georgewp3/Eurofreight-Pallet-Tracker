@@ -10,8 +10,10 @@ const load = () => {
     return null;
   }
 };
-const save = (state) =>
+
+const save = (state) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+};
 
 export const usePalletStore = create((set, get) => ({
   meta: {
@@ -85,8 +87,9 @@ export const usePalletStore = create((set, get) => ({
       "Status",
     ];
     const lines = [header.join(",")];
+
     rows.forEach((r) => {
-      const auto = r.looseBoxes; // define “AUTO TOTAL” as loose boxes column
+      const auto = r.looseBoxes;
       const status = r.manual === auto ? "OK" : "FAULT";
       lines.push(
         [
@@ -103,6 +106,7 @@ export const usePalletStore = create((set, get) => ({
         ].join(",")
       );
     });
+
     const blob = new Blob([lines.join("\n")], {
       type: "text/csv;charset=utf-8",
     });
