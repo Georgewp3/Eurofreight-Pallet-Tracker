@@ -48,19 +48,21 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff;color:#222}
 .pt-table th:nth-child(3){width:7%}
 .pt-table th:nth-child(4){width:7%}
 
-/* Divider row producing right side headers */
-.divider-row td{padding:0;height:42px;background:#f7f7f7;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+/* Right-side section headers */
 .subhead{
   background:var(--grayhead);color:#fff;font-weight:700;letter-spacing:.3px;text-transform:uppercase;text-align:center
 }
 
 /* Green +/- buttons */
 .gbtn{
-  background:var(--green);border:none;border-radius:6px;color:#fff;padding:4px 10px;font-weight:700;cursor:pointer
+  background:var(--green);border:none;border-radius:6px;color:#fff;padding:4px 10px;font-weight:700;cursor:pointer;
+  pointer-events:auto;
 }
 .gbtn:hover{background:var(--green-hover)}
 .gbtn-disabled{opacity:.45;cursor:default}
-.pt-table td.btns{display:flex;gap:8px;justify-content:center}
+
+/* Put flex on inner div, not td, and guarantee clicks */
+.btns{display:inline-flex;gap:8px;justify-content:center;pointer-events:auto}
 
 /* Status colors (rightmost column) */
 .status.ok{color:#198754;font-weight:700}

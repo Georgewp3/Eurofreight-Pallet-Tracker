@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { defaultRows } from "../data/defaultRows";
 
-const STORAGE_KEY = "eurofreight:pallet-tracking:v1";
+const STORAGE_KEY = "eurofreight:pallet-tracking:legacy-ui:v2";
 
 const load = () => {
   try {

@@ -8,7 +8,7 @@ export default function Row({ row }) {
 
 function CategoryRow({ row }) {
     const { inc } = usePalletStore();
-    const isMix = row.id === "cat-mix"; // this row shows the right-side grey headers
+    const isMix = row.id === "cat-mix"; // right-side grey headers on this row
 
     return (
         <tr>
@@ -21,7 +21,6 @@ function CategoryRow({ row }) {
                 <GreenBtn onClick={() => inc(row.id, "count", +1)}>+1</GreenBtn>
             </td>
 
-            {/* Right side: empty for normal categories; subheaders for MIX */}
             {isMix ? (
                 <>
                     <td className="subhead">LOOSE BOXES</td>
@@ -46,16 +45,19 @@ function SkuRow({ row }) {
         <tr>
             <td className="cell-left">{row.label}</td>
 
-            {/* Left Count / -1 / +1 cells are present but disabled for SKU rows (as in screenshot) */}
+            {/* Present but disabled on SKUs to match screenshot */}
             <td className="cell-num">0</td>
             <td className="cell-num"><GreenBtn disabled>-1</GreenBtn></td>
             <td className="cell-num"><GreenBtn disabled>+1</GreenBtn></td>
 
+            {/* Right side */}
             <td className="cell-num">{row.looseBoxes}</td>
 
-            <td className="cell-num btns">
-                <GreenBtn onClick={() => inc(row.id, "manual", -1)}>-1</GreenBtn>
-                <GreenBtn onClick={() => inc(row.id, "manual", +1)}>+1</GreenBtn>
+            <td className="cell-num">
+                <div className="btns">
+                    <GreenBtn onClick={() => inc(row.id, "manual", -1)}>-1</GreenBtn>
+                    <GreenBtn onClick={() => inc(row.id, "manual", +1)}>+1</GreenBtn>
+                </div>
             </td>
 
             <td className="cell-num">{autoTotal}</td>
@@ -78,6 +80,7 @@ function SkuRow({ row }) {
 function GreenBtn({ children, onClick, disabled }) {
     return (
         <button
+            type="button"
             disabled={disabled}
             onClick={onClick}
             className={clsx("gbtn", disabled && "gbtn-disabled")}
