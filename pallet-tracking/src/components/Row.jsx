@@ -2,45 +2,87 @@ import { usePalletStore } from "../store/usePalletStore";
 import clsx from "clsx";
 
 export default function Row({ row }) {
-    const { inc, toggleCheck } = usePalletStore();
-    const autoTotal = row.looseBoxes;           // define AUTO as loose boxes
-    const statusOk = Number(row.manual) === Number(autoTotal);
+    if (row.type === "cat") return <CategoryRow row={row} />;
+    return <SkuRow row={row} />;
+}
 
-    const Btn = ({ onClick, children }) => (
-        <button
-            onClick={onClick}
-            className="rounded-xl bg-neutral-100 hover:bg-neutral-200 px-3 py-1 text-sm font-semibold shadow-inner"
-        >
-            {children}
-        </button>
-    );
+function CategoryRow({ row }) {
+    const { inc } = usePalletStore();
+    const isMix = row.id === "cat-mix"; // this row shows the right-side grey headers
 
     return (
-        <tr className="border-b border-neutral-200 hover:bg-neutral-50">
-            <td className="py-3 px-3 text-sm font-medium text-neutral-800">{row.label}</td>
+        <tr>
+            <td className="cell-left">{row.label}</td>
+            <td className="cell-num">{row.count}</td>
+            <td className="cell-num">
+                <GreenBtn onClick={() => inc(row.id, "count", -1)}>-1</GreenBtn>
+            </td>
+            <td className="cell-num">
+                <GreenBtn onClick={() => inc(row.id, "count", +1)}>+1</GreenBtn>
+            </td>
 
-            <td className="text-center">{row.looseBoxes}</td>
-            <td className="text-center"><Btn onClick={() => inc(row.id, "looseBoxes", -1)}>-1</Btn></td>
-            <td className="text-center"><Btn onClick={() => inc(row.id, "looseBoxes", +1)}>+1</Btn></td>
+            {/* Right side: empty for normal categories; subheaders for MIX */}
+            {isMix ? (
+                <>
+                    <td className="subhead">LOOSE BOXES</td>
+                    <td className="subhead">MANUAL</td>
+                    <td className="subhead">AUTO TOTAL</td>
+                    <td className="subhead">CHECK</td>
+                    <td className="subhead">AUTO</td>
+                </>
+            ) : (
+                <td colSpan={5}></td>
+            )}
+        </tr>
+    );
+}
 
-            <td className="text-center">{row.manual}</td>
-            <td className="text-center"><Btn onClick={() => inc(row.id, "manual", -1)}>-1</Btn></td>
-            <td className="text-center"><Btn onClick={() => inc(row.id, "manual", +1)}>+1</Btn></td>
+function SkuRow({ row }) {
+    const { inc, toggleCheck } = usePalletStore();
+    const autoTotal = row.looseBoxes;
+    const ok = Number(row.manual) === Number(autoTotal);
 
-            <td className="text-center">{autoTotal}</td>
+    return (
+        <tr>
+            <td className="cell-left">{row.label}</td>
 
-            <td className="text-center">
+            {/* Left Count / -1 / +1 cells are present but disabled for SKU rows (as in screenshot) */}
+            <td className="cell-num">0</td>
+            <td className="cell-num"><GreenBtn disabled>-1</GreenBtn></td>
+            <td className="cell-num"><GreenBtn disabled>+1</GreenBtn></td>
+
+            <td className="cell-num">{row.looseBoxes}</td>
+
+            <td className="cell-num btns">
+                <GreenBtn onClick={() => inc(row.id, "manual", -1)}>-1</GreenBtn>
+                <GreenBtn onClick={() => inc(row.id, "manual", +1)}>+1</GreenBtn>
+            </td>
+
+            <td className="cell-num">{autoTotal}</td>
+
+            <td className="cell-num">
                 <input
                     type="checkbox"
                     checked={row.check}
                     onChange={() => toggleCheck(row.id)}
-                    className="h-4 w-4"
                 />
             </td>
 
-            <td className={clsx("text-center font-semibold", statusOk ? "text-emerald-600" : "text-red-600")}>
-                {statusOk ? "OK" : "FAULT"}
+            <td className={clsx("cell-num status", ok ? "ok" : "fault")}>
+                {ok ? "OK" : "FAULT"}
             </td>
         </tr>
+    );
+}
+
+function GreenBtn({ children, onClick, disabled }) {
+    return (
+        <button
+            disabled={disabled}
+            onClick={onClick}
+            className={clsx("gbtn", disabled && "gbtn-disabled")}
+        >
+            {children}
+        </button>
     );
 }
