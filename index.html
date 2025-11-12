@@ -6,196 +6,60 @@
 <title>Pallet Tracking</title>
 <style>
   :root{
-    --bg:#f3f5f7;
-    --card:#ffffff;
-    --text:#1f2937;
-    --muted:#6b7280;
-    --line:#e5e7eb;
-    --green:#2fb34e;
-    --green-pressed:#22903c;
-    --header:#2f3b4a;
-    --subhead:#6b6f75;
-    --fault:#e11d48;
-    --ok:#10b981;
-    --row-h:46px;
+    --bg:#f3f5f7; --card:#ffffff; --text:#1f2937; --muted:#6b7280; --line:#e5e7eb;
+    --green:#2fb34e; --green-pressed:#22903c; --header:#2f3b4a; --subhead:#6b6f75;
+    --fault:#e11d48; --ok:#10b981; --row-h:46px;
   }
   *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;
-    color:var(--text);
-    background:var(--bg);
-  }
-  .wrap{
-    max-width:1200px;
-    margin:24px auto 64px;
-    padding:0 16px;
-  }
+  body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif; color:var(--text); background:var(--bg); }
+  .wrap{ max-width:1200px; margin:24px auto 64px; padding:0 16px; }
 
-  /* Top bar */
-  .top{
-    display:grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items:center;
-    gap:16px;
-    margin-bottom:18px;
-  }
-  .top h1{
-    margin:0;
-    text-align:center;
-    font-size:36px;
-    font-weight:800;
-  }
-  .meta{
-    display:flex;
-    align-items:center;
-    gap:18px;
-    justify-self:end;
-  }
-  .left-meta{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    justify-self:start;
-  }
-  label{
-    font-weight:700;
-    font-size:14px;
-    color:var(--text);
-  }
+  .top{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px; margin-bottom:18px; }
+  .top h1{ margin:0; text-align:center; font-size:36px; font-weight:800; }
+  .meta{ display:flex; align-items:center; gap:18px; justify-self:end; }
+  .left-meta{ display:flex; align-items:center; gap:12px; justify-self:start; }
+  label{ font-weight:700; font-size:14px; color:var(--text); }
   input[type="date"], input[type="text"], input[type="number"]{
-    height:36px;
-    padding:6px 10px;
-    border:1px solid var(--line);
-    border-radius:6px;
-    background:#fff;
-    color:var(--text);
-    outline:none;
+    height:36px; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:#fff; color:var(--text); outline:none;
   }
   input[type="text"], input[type="number"]{ width:140px; }
 
-  /* Table */
-  .table-card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:10px;
-    overflow:hidden;
-    box-shadow:0 4px 10px rgba(0,0,0,.04);
-  }
-  table{
-    width:100%;
-    border-collapse:collapse;
-    table-layout:fixed;
-  }
+  .table-card{ background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; box-shadow:0 4px 10px rgba(0,0,0,.04); }
+  table{ width:100%; border-collapse:collapse; table-layout:fixed; }
   thead tr th{
-    background:var(--green);
-    color:#fff;
-    font-weight:800;
-    text-transform:none;
-    letter-spacing:.2px;
-    border-right:1px solid rgba(255,255,255,.18);
-    height:48px;
-    font-size:14px;
+    background:var(--green); color:#fff; font-weight:800; letter-spacing:.2px; border-right:1px solid rgba(255,255,255,.18);
+    height:48px; font-size:14px;
   }
   thead tr th:last-child{border-right:0}
-  tbody td, tbody th{
-    border-top:1px solid var(--line);
-    height:var(--row-h);
-    font-size:15px;
-  }
-  tbody th{
-    font-weight:700;
-    text-align:left;
-    padding:0 14px;
-  }
-  tbody td{
-    text-align:center;
-    padding:0 8px;
-  }
-  .num{
-    font-variant-numeric:tabular-nums;
-    font-weight:700;
-  }
+  tbody td, tbody th{ border-top:1px solid var(--line); height:var(--row-h); font-size:15px; }
+  tbody th{ font-weight:700; text-align:left; padding:0 14px; }
+  tbody td{ text-align:center; padding:0 8px; }
+  .num{ font-variant-numeric:tabular-nums; font-weight:700; }
   .pill{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-width:36px;
-    height:30px;
-    padding:0 10px;
-    border-radius:8px;
-    border:none;
-    background:var(--green);
-    color:#fff;
-    font-weight:800;
-    cursor:pointer;
-    user-select:none;
-    transition:transform .02s ease, background .12s ease;
+    display:inline-flex; align-items:center; justify-content:center; min-width:36px; height:30px; padding:0 10px; border-radius:8px;
+    border:none; background:var(--green); color:#fff; font-weight:800; cursor:pointer; user-select:none; transition:transform .02s, background .12s;
   }
   .pill:active{ transform:translateY(1px); background:var(--green-pressed); }
   .pill.small{ min-width:30px; height:28px; font-size:14px; }
 
-  /* Subheader row that begins the right-side section */
-  .subhead td{
-    background:var(--subhead);
-    color:#fff;
-    font-weight:800;
-    border-top:1px solid #555b62;
-    height:44px;
-  }
-  .subhead td.blank{
-    background:#fff;
-    border-top:1px solid var(--line);
-  }
+  .subhead td{ background:var(--subhead); color:#fff; font-weight:800; border-top:1px solid #555b62; height:44px; }
+  .subhead td.blank{ background:#fff; border-top:1px solid var(--line); }
 
-  /* Status */
   .status{ font-weight:900; letter-spacing:.2px; }
-  .status.fault{ color:var(--fault); }
-  .status.ok{ color:var(--ok); }
+  .status.fault{ color:var(--fault); } .status.ok{ color:var(--ok); }
 
-  /* Checkbox cell */
-  .tick{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .tick input{ width:18px; height:18px; cursor:pointer; }
+  .tick{ display:flex; align-items:center; justify-content:center; } .tick input{ width:18px; height:18px; cursor:pointer; }
 
-  /* bottom actions */
-  .actions{
-    display:flex;
-    justify-content:center;
-    margin-top:18px;
-  }
-  .danger{
-    background:#ef233c;
-    color:#fff;
-    border:none;
-    border-radius:8px;
-    padding:12px 18px;
-    font-weight:900;
-    cursor:pointer;
-    box-shadow:0 6px 16px rgba(239,35,60,.25);
-  }
+  .actions{ display:flex; justify-content:center; margin-top:18px; }
+  .danger{ background:#ef233c; color:#fff; border:none; border-radius:8px; padding:12px 18px; font-weight:900; cursor:pointer; box-shadow:0 6px 16px rgba(239,35,60,.25); }
   .danger:active{ transform:translateY(1px); }
 
-  /* Column widths mimic the screenshot */
-  col.c1{ width: 32%; }
-  col.c2{ width: 8%; }
-  col.c3{ width: 7%; }
-  col.c4{ width: 7%; }
-  col.c5{ width: 18%; }
-  col.c6{ width: 12%; }
-  col.c7{ width: 8%; }
-  col.c8{ width: 6%; }
-  col.c9{ width: 12%; }
+  col.c1{ width:32%; } col.c2{ width:8%; } col.c3{ width:7%; } col.c4{ width:7%; }
+  col.c5{ width:18%; } col.c6{ width:12%; } col.c7{ width:8%; } col.c8{ width:6%; } col.c9{ width:12%; }
 
-  /* Responsive */
-  @media (max-width: 980px){
-    .top{ grid-template-columns: 1fr; }
-    .top h1{ order: -1; margin-bottom:6px; }
-    .left-meta, .meta{ justify-self:start; flex-wrap:wrap; }
-    input[type="text"], input[type="number"]{ width:110px; }
+  @media (max-width:980px){
+    .top{ grid-template-columns:1fr; } .top h1{ order:-1; margin-bottom:6px; }
+    .left-meta, .meta{ justify-self:start; flex-wrap:wrap; } input[type="text"], input[type="number"]{ width:110px; }
   }
 </style>
 </head>
@@ -211,7 +75,7 @@
         <label for="week">WEEK:</label>
         <input id="week" type="number" min="1" step="1" />
         <label for="container">CONTAINER ID:</label>
-        <input id="container" type="text" placeholder="" />
+        <input id="container" type="text" />
       </div>
     </div>
 
@@ -234,7 +98,7 @@
             <th></th>
           </tr>
         </thead>
-        <tbody id="tbody"><!-- rows inserted by JS --></tbody>
+        <tbody id="tbody"></tbody>
       </table>
     </div>
 
@@ -245,7 +109,7 @@
 
 <script>
 (function(){
-  // ---------- Data model ----------
+  /* ---------------- Data model ---------------- */
   const CATEGORIES_BEFORE = [
     "LOOSE",
     "ΕΛΑΦΡΙΟΥ ΤΥΠΟΥ",
@@ -256,89 +120,45 @@
     "MIX"
   ];
   const SKU_LIST = [
-    "7101 NIC",
-    "7110 LAK",
-    "7120 LIM",
-    "7150 LCA",
-    "7140 FAM",
-    "7104 PFO",
-    "7115 CW"
+    "7101 NIC","7110 LAK","7120 LIM","7150 LCA","7140 FAM","7104 PFO","7115 CW"
   ];
   const STORAGE_KEY = "pallet-tracking-v1";
 
-  // ---------- State per date ----------
   function defaultDateState(){
-    const counts = {};
+    const counts = {}; const loose = {}; const check = {};
     [...CATEGORIES_BEFORE, ...SKU_LIST].forEach(k => counts[k]=0);
-    const manual = {}; const loose = {}; const check = {};
-    SKU_LIST.forEach(k => { manual[k]=0; loose[k]=0; check[k]=false; });
-    return {
-      counts, manual, loose, check,
-      week: "", container: ""
-    };
+    SKU_LIST.forEach(k => { loose[k]=0; check[k]=false; });
+    return { counts, loose, check, week:"", container:"" };
   }
-  function getAll(){
-    try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
-    catch{ return {}; }
-  }
+  function getAll(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }catch{ return {}; } }
   function saveAll(obj){ localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); }
-  function getState(dateKey){
-    const all = getAll();
-    if(!all[dateKey]){ all[dateKey] = defaultDateState(); saveAll(all); }
-    return all[dateKey];
-  }
-  function setState(dateKey, newState){
-    const all = getAll();
-    all[dateKey] = newState;
-    saveAll(all);
-  }
+  function getState(dateKey){ const all=getAll(); if(!all[dateKey]){ all[dateKey]=defaultDateState(); saveAll(all);} return all[dateKey]; }
+  function setState(dateKey, st){ const all=getAll(); all[dateKey]=st; saveAll(all); }
 
-  // ---------- DOM helpers ----------
-  const $ = sel => document.querySelector(sel);
+  /* ---------------- DOM helpers ---------------- */
+  const $ = s=>document.querySelector(s);
   const tbody = $("#tbody");
-
-  // Format today as yyyy-mm-dd for <input type="date">
-  function todayISO(){
-    const d = new Date();
-    const m = String(d.getMonth()+1).padStart(2,"0");
-    const day = String(d.getDate()).padStart(2,"0");
-    return `${d.getFullYear()}-${m}-${day}`;
-  }
-
-  // ---------- Rendering ----------
+  function todayISO(){ const d=new Date(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0"); return `${d.getFullYear()}-${m}-${day}`; }
   let dateKey = todayISO();
   $("#date").value = dateKey;
 
+  /* ---------------- Rendering ---------------- */
   function render(){
-    const state = getState(dateKey);
-    $("#week").value = state.week || "";
-    $("#container").value = state.container || "";
-
-    // Build rows
+    const s = getState(dateKey);
+    $("#week").value = s.week || "";
+    $("#container").value = s.container || "";
     tbody.innerHTML = "";
 
-    // Rows before the right-hand section
-    CATEGORIES_BEFORE.forEach(cat => {
-      tbody.appendChild(rowLeftOnly(cat, state));
-    });
+    CATEGORIES_BEFORE.forEach(cat => tbody.appendChild(rowLeftOnly(cat, s)));
 
-    // The subheader row for right-hand section
     tbody.appendChild(subheaderRow());
 
-    // SKU rows with right-hand columns
-    SKU_LIST.forEach(cat => {
-      tbody.appendChild(rowFull(cat, state));
-    });
+    SKU_LIST.forEach(cat => tbody.appendChild(rowFull(cat, s)));
   }
 
   function subheaderRow(){
-    const tr = document.createElement("tr");
-    tr.className = "subhead";
-    tr.appendChild(tdBlank()); // 1
-    tr.appendChild(tdBlank()); // 2
-    tr.appendChild(tdBlank()); // 3
-    tr.appendChild(tdBlank()); // 4
-
+    const tr=document.createElement("tr"); tr.className="subhead";
+    tr.appendChild(tdBlank()); tr.appendChild(tdBlank()); tr.appendChild(tdBlank()); tr.appendChild(tdBlank());
     tr.appendChild(newTD("LOOSE BOXES"));
     tr.appendChild(newTD("MANUAL"));
     tr.appendChild(newTD("AUTO TOTAL"));
@@ -346,217 +166,133 @@
     tr.appendChild(newTD("AUTO"));
     return tr;
   }
-  function tdBlank(){
-    const td = document.createElement("td");
-    td.className = "blank";
-    return td;
-  }
-  function newTD(text){
-    const td = document.createElement("td");
-    td.textContent = text;
-    return td;
-  }
+  function tdBlank(){ const td=document.createElement("td"); td.className="blank"; return td; }
+  function newTD(t){ const td=document.createElement("td"); td.textContent=t; return td; }
 
   function btn(label, cls, onClick){
-    const b = document.createElement("button");
-    b.type="button";
-    b.className = "pill " + (cls||"");
-    b.textContent = label;
-    b.addEventListener("click", onClick);
+    const b=document.createElement("button");
+    b.type="button"; b.className="pill "+(cls||""); b.textContent=label; b.addEventListener("click", onClick);
     return b;
   }
-  function cellNumber(val){
-    const td = document.createElement("td");
-    td.className = "num";
-    td.textContent = String(val);
-    return td;
-  }
+  function cellNumber(val){ const td=document.createElement("td"); td.className="num"; td.textContent=String(val); return td; }
+  function tdButton(label, onClick){ const td=document.createElement("td"); td.appendChild(btn(label==="-"?"-1":"+1","",onClick)); return td; }
 
   function rowLeftOnly(cat, state){
-    const tr = document.createElement("tr");
-    const left = document.createElement("th");
-    left.textContent = cat;
-    tr.appendChild(left);
-
-    // Count
-    const countCell = cellNumber(state.counts[cat] ?? 0);
-    countCell.dataset.key = cat;
-    tr.appendChild(countCell);
-
-    // -1
-    tr.appendChild(tdButton("-", () => changeCount(cat, -1)));
-    // +1
-    tr.appendChild(tdButton("+", () => changeCount(cat, +1)));
-
-    // Right-side blanks
+    const tr=document.createElement("tr");
+    const th=document.createElement("th"); th.textContent=cat; tr.appendChild(th);
+    const countCell=cellNumber(state.counts[cat] ?? 0); countCell.dataset.key=cat; tr.appendChild(countCell);
+    tr.appendChild(tdButton("-", ()=>changeCount(cat,-1)));
+    tr.appendChild(tdButton("+", ()=>changeCount(cat,+1)));
     for(let i=0;i<5;i++) tr.appendChild(document.createElement("td"));
     return tr;
   }
 
   function rowFull(cat, state){
-    const tr = document.createElement("tr");
+    const tr=document.createElement("tr");
+    const th=document.createElement("th"); th.textContent=cat; tr.appendChild(th);
 
-    const left = document.createElement("th");
-    left.textContent = cat;
-    tr.appendChild(left);
+    const countCell=cellNumber(state.counts[cat] ?? 0); countCell.dataset.key=cat; tr.appendChild(countCell);
+    tr.appendChild(tdButton("-", ()=>changeCount(cat,-1)));
+    tr.appendChild(tdButton("+", ()=>changeCount(cat,+1)));
 
-    // Count
-    const countCell = cellNumber(state.counts[cat] ?? 0);
-    countCell.dataset.key = cat;
-    tr.appendChild(countCell);
-
-    // -1 / +1 for main count
-    tr.appendChild(tdButton("-", () => changeCount(cat, -1)));
-    tr.appendChild(tdButton("+", () => changeCount(cat, +1)));
-
-    // Loose Boxes (editable by prompt)
-    const looseCell = cellNumber(state.loose[cat] ?? 0);
-    looseCell.style.cursor = "text";
-    looseCell.title = "Click to edit";
-    looseCell.addEventListener("click", () => {
+    // LOOSE BOXES (editable on click)
+    const looseCell=cellNumber(state.loose[cat] ?? 0);
+    looseCell.style.cursor="text"; looseCell.title="Click to edit";
+    looseCell.addEventListener("click", ()=>{
       const cur = Number(getState(dateKey).loose[cat] ?? 0);
       const input = prompt(`Set LOOSE BOXES for ${cat}:`, String(cur));
       if(input===null) return;
       const val = Number(input);
       if(Number.isFinite(val) && val>=0){
-        const s = getState(dateKey);
-        s.loose[cat] = Math.trunc(val);
-        setState(dateKey, s);
-        updateSkuRow(cat);
+        const s=getState(dateKey); s.loose[cat]=Math.trunc(val); setState(dateKey,s); updateSkuRow(cat);
       }
     });
     tr.appendChild(looseCell);
 
-    // Manual (-1 / +1)
-    const manualCell = document.createElement("td");
-    manualCell.appendChild(btn("-1","small", () => changeManual(cat, -1)));
-    manualCell.appendChild(document.createTextNode(" "));
-    manualCell.appendChild(btn("+1","small", () => changeManual(cat, +1)));
-    tr.appendChild(manualCell);
+    // MANUAL buttons now modify LOOSE BOXES
+    const manualTd=document.createElement("td");
+    manualTd.appendChild(btn("-1","small", ()=>changeLoose(cat,-1)));
+    manualTd.appendChild(document.createTextNode(" "));
+    manualTd.appendChild(btn("+1","small", ()=>changeLoose(cat,+1)));
+    tr.appendChild(manualTd);
 
-    // Auto total
-    const autoTot = calcAutoTotal(cat);
-    const autoCell = cellNumber(autoTot);
-    autoCell.dataset.autoFor = cat;
+    // AUTO TOTAL = Count + Loose Boxes
+    const autoCell=cellNumber(calcAutoTotal(cat));
+    autoCell.dataset.autoFor=cat;
     tr.appendChild(autoCell);
 
-    // Check
-    const chkTd = document.createElement("td");
-    chkTd.className="tick";
-    const chk = document.createElement("input");
-    chk.type="checkbox";
-    chk.checked = !!state.check[cat];
-    chk.addEventListener("change", () => {
-      const s = getState(dateKey);
-      s.check[cat] = chk.checked;
-      setState(dateKey, s);
-      updateSkuRow(cat);
-    });
-    chkTd.appendChild(chk);
-    tr.appendChild(chkTd);
+    // CHECK
+    const chkTd=document.createElement("td"); chkTd.className="tick";
+    const chk=document.createElement("input"); chk.type="checkbox"; chk.checked=!!state.check[cat];
+    chk.addEventListener("change", ()=>{ const s=getState(dateKey); s.check[cat]=chk.checked; setState(dateKey,s); updateSkuRow(cat); });
+    chkTd.appendChild(chk); tr.appendChild(chkTd);
 
-    // Auto status
-    const statusTd = document.createElement("td");
-    statusTd.dataset.statusFor = cat;
-    tr.appendChild(statusTd);
-
-    // Initial status render
+    // AUTO status (OK when checked; else FAULT)
+    const statusTd=document.createElement("td"); statusTd.dataset.statusFor=cat; tr.appendChild(statusTd);
     paintStatus(cat, statusTd);
 
     return tr;
   }
 
-  function tdButton(label, onClick){
-    const td = document.createElement("td");
-    td.appendChild(btn(label==="-"? "-1":"+1", "", onClick));
-    return td;
-  }
-
-  // ---------- Mutations ----------
+  /* ---------------- Mutations ---------------- */
   function changeCount(cat, delta){
-    const s = getState(dateKey);
-    const cur = s.counts[cat] ?? 0;
-    const next = Math.max(0, cur + delta);
-    s.counts[cat] = next;
-    setState(dateKey, s);
+    const s=getState(dateKey);
+    const cur=s.counts[cat] ?? 0;
+    s.counts[cat] = Math.max(0, cur+delta);
+    setState(dateKey,s);
     updateLeftCount(cat);
     if(SKU_LIST.includes(cat)) updateSkuRow(cat);
   }
-  function changeManual(cat, delta){
-    const s = getState(dateKey);
-    const cur = s.manual[cat] ?? 0;
-    const next = Math.max(0, cur + delta);
-    s.manual[cat] = next;
-    setState(dateKey, s);
+  // MANUAL +/- modifies LOOSE BOXES
+  function changeLoose(cat, delta){
+    const s=getState(dateKey);
+    const cur=s.loose[cat] ?? 0;
+    s.loose[cat] = Math.max(0, cur+delta);
+    setState(dateKey,s);
     updateSkuRow(cat);
   }
 
-  // ---------- Repaint helpers ----------
+  /* ---------------- Repaint helpers ---------------- */
   function updateLeftCount(cat){
     const cell = tbody.querySelector(`td[data-key="${cssEscape(cat)}"]`);
-    if(cell){
-      const s = getState(dateKey);
-      cell.textContent = String(s.counts[cat] ?? 0);
-    }
+    if(cell){ const s=getState(dateKey); cell.textContent=String(s.counts[cat] ?? 0); }
   }
   function calcAutoTotal(cat){
-    const s = getState(dateKey);
-    return (s.loose[cat] ?? 0) + (s.manual[cat] ?? 0);
+    const s=getState(dateKey);
+    const main = s.counts[cat] ?? 0;
+    const loose = s.loose[cat] ?? 0;
+    return main + loose; // per requirement
   }
   function paintStatus(cat, td){
-    const s = getState(dateKey);
-    const autoTotal = calcAutoTotal(cat);
-    const main = s.counts[cat] ?? 0;
-    const ok = !!s.check[cat] && (autoTotal === main);
+    const s=getState(dateKey);
+    const ok = !!s.check[cat]; // OK only when checked
     td.className = "status " + (ok ? "ok":"fault");
     td.textContent = ok ? "OK" : "FAULT";
-    // also update the Auto Total number nearby
     const autoCell = tbody.querySelector(`td[data-auto-for="${cssEscape(cat)}"]`);
-    if(autoCell) autoCell.textContent = String(autoTotal);
+    if(autoCell) autoCell.textContent = String(calcAutoTotal(cat));
   }
   function updateSkuRow(cat){
-    const row = [...tbody.querySelectorAll("tr")].find(tr => tr.firstChild && tr.firstChild.tagName==="TH" && tr.firstChild.textContent===cat);
+    const rows=[...tbody.querySelectorAll("tr")];
+    const row = rows.find(r => r.firstChild && r.firstChild.tagName==="TH" && r.firstChild.textContent===cat);
     if(!row) return;
-    // repaint loose, auto total, status, and left count cell
-    const s = getState(dateKey);
-    const looseCell = row.querySelector(".num"); // careful: first .num is the Count cell; loose is the next .num
-    const nums = row.querySelectorAll(".num");
-    // nums[0]=main count, nums[1]=loose, nums[2]=auto total
-    if(nums[1]) nums[1].textContent = String(s.loose[cat] ?? 0);
+    const s=getState(dateKey);
+    const nums=row.querySelectorAll(".num"); // [count, loose, auto]
     if(nums[0]) nums[0].textContent = String(s.counts[cat] ?? 0);
-    const statusTd = row.querySelector('td[data-status-for]');
+    if(nums[1]) nums[1].textContent = String(s.loose[cat] ?? 0);
+    const statusTd=row.querySelector('td[data-status-for]');
     paintStatus(cat, statusTd);
   }
+  function cssEscape(str){ return str.replace(/["\\]/g,"\\$&"); }
 
-  // tiny helper for query selectors with user text
-  function cssEscape(str){ return str.replace(/["\\]/g, "\\$&"); }
-
-  // ---------- Inputs / controls ----------
-  $("#date").addEventListener("change", e=>{
-    dateKey = e.target.value || todayISO();
-    // ensure state exists
-    getState(dateKey);
-    render();
-  });
-  $("#week").addEventListener("input", e=>{
-    const s = getState(dateKey);
-    s.week = e.target.value;
-    setState(dateKey, s);
-  });
-  $("#container").addEventListener("input", e=>{
-    const s = getState(dateKey);
-    s.container = e.target.value;
-    setState(dateKey, s);
-  });
+  /* ---------------- Inputs ---------------- */
+  $("#date").addEventListener("change", e=>{ dateKey=e.target.value||todayISO(); getState(dateKey); render(); });
+  $("#week").addEventListener("input", e=>{ const s=getState(dateKey); s.week=e.target.value; setState(dateKey,s); });
+  $("#container").addEventListener("input", e=>{ const s=getState(dateKey); s.container=e.target.value; setState(dateKey,s); });
   $("#reset").addEventListener("click", ()=>{
     if(!confirm("Delete all entries for this date?")) return;
-    const all = getAll();
-    all[dateKey] = defaultDateState();
-    saveAll(all);
-    render();
+    const all=getAll(); all[dateKey]=defaultDateState(); saveAll(all); render();
   });
 
-  // Initial render
   render();
 })();
 </script>
