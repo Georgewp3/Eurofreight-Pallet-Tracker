@@ -54,11 +54,13 @@ function SkuRow({ row }) {
             <td className="cell-num">{row.looseBoxes}</td>
 
             <td className="cell-num">
-                <div className="btns">
+                <div className="manual-cell">
                     <GreenBtn onClick={() => inc(row.id, "manual", -1)}>-1</GreenBtn>
+                    <span className="manual-value">{row.manual}</span>
                     <GreenBtn onClick={() => inc(row.id, "manual", +1)}>+1</GreenBtn>
                 </div>
             </td>
+
 
             <td className="cell-num">{autoTotal}</td>
 
