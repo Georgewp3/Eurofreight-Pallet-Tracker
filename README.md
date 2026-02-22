@@ -59,5 +59,5 @@ A UTF-8 BOM (`\uFEFF`) is included so Excel opens it cleanly.
 
 
 
-The **EXPORT CSV** button produces a file named `pallet-tracking_YYYY-MM-DD.csv` with columns:
+The **EXPORT CSV** button produces a file named `pallet-tracking_YYYY-MM-DD.csv` 
 
